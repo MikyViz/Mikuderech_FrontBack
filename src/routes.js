@@ -28,11 +28,13 @@ router.post('/:endpoint', validateRequest, async (req, res) => {
     console.log('Отправляемые данные:', requestData);
     
     // Формируем запрос к внешнему API
+    console.time('API Request Time');
     const apiResponse = await axios.post(apiUrl, {
       userName: config.apiCredentials.userName,
       password: config.apiCredentials.password,
       data: requestData // Отправляем объект, а не строку
     });
+    console.timeEnd('API Request Time');
 
     // Возвращаем результат клиенту
     res.json(apiResponse.data);

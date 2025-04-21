@@ -6,6 +6,7 @@ const validateRequest = (req, res, next) => {
       message: 'Отсутствуют необходимые данные в запросе'
     });
   }
+  console.timeEnd('validateRequest');
   next();
 };
 
