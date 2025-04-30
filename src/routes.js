@@ -1,7 +1,7 @@
-const express = require('express');
-const axios = require('axios');
-const config = require('./config');
-const { validateRequest } = require('./middleware');
+import express from 'express';
+import axios from 'axios';
+import config from './config.js';
+import { validateRequest } from './middleware.js';
 
 const router = express.Router();
 
@@ -16,7 +16,8 @@ router.post('/:endpoint', validateRequest, async (req, res) => {
       throw new Error('API_BASE_URL не определен в конфигурации');
     }
     
-    const apiUrl = `${config.apiBaseUrl}/${endpoint}`;
+    // Исправлен формат URL - добавлен сегмент 'md/'
+    const apiUrl = `${config.apiBaseUrl}md/${endpoint}`;
     console.log('Отправка запроса к:', apiUrl);
     
     // Добавляем UserId в data, если его там нет
@@ -58,4 +59,4 @@ router.post('/:endpoint', validateRequest, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
