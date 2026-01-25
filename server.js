@@ -2,7 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import routes from './src/routes.js';
+import routes from './routes/index.js';
+import { initPasswordCleanup } from './services/passwordService.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,8 +13,11 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 
+// Инициализация очистки старых паролей
+initPasswordCleanup();
+
 // Routes
-app.use('/api', routes);
+app.use('/', routes);
 
 // Error handler
 app.use((err, req, res, next) => {

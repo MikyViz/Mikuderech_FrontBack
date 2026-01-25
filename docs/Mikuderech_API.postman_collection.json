@@ -1,0 +1,207 @@
+{
+  "info": {
+    "name": "Mikuderech API",
+    "description": "API endpoints для Mikuderech приложения",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8888",
+      "type": "string"
+    },
+    {
+      "key": "testPhone",
+      "value": "+972501234567",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Проверка работоспособности сервера"
+      }
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Generate Password (Send SMS)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"PhoneNumber\": \"{{testPhone}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/generate-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "generate-password"]
+            },
+            "description": "Генерирует и отправляет SMS-код на указанный номер телефона"
+          }
+        },
+        {
+          "name": "Verify Password (Check SMS Code)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"phoneNumber\": \"{{testPhone}}\",\n    \"password\": \"123456\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-password"]
+            },
+            "description": "Проверяет введенный пользователем SMS-код"
+          }
+        },
+        {
+          "name": "Auth Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"username\": \"test\",\n    \"password\": \"test123\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/auth",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "auth"]
+            },
+            "description": "Основная аутентификация пользователя"
+          }
+        }
+      ],
+      "description": "Endpoints для аутентификации"
+    },
+    {
+      "name": "API",
+      "item": [
+        {
+          "name": "Get User Info",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"UserId\": \"123\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/GetUserInfo",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "GetUserInfo"]
+            },
+            "description": "Получить информацию о пользователе"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"UserId\": \"123\",\n    \"Name\": \"John Doe\",\n    \"Phone\": \"{{testPhone}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/UpdateProfile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "UpdateProfile"]
+            },
+            "description": "Обновить профиль пользователя"
+          }
+        },
+        {
+          "name": "Get Transport List",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"City\": \"Tel Aviv\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/GetTransportList",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "GetTransportList"]
+            },
+            "description": "Получить список транспорта"
+          }
+        },
+        {
+          "name": "Generic API Call",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    // ваши параметры\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/:endpoint",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", ":endpoint"],
+              "variable": [
+                {
+                  "key": "endpoint",
+                  "value": "YourEndpoint",
+                  "description": "Замените на нужный endpoint"
+                }
+              ]
+            },
+            "description": "Шаблон для любого API запроса"
+          }
+        }
+      ],
+      "description": "Общие API endpoints"
+    }
+  ]
+}
