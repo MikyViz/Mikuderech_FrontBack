@@ -3,18 +3,18 @@ import config from '../../config/config.js';
 import { passwordStorage } from '../../services/passwordService.js';
 
 /**
- * Генерирует и отправляет пароль пользователю
+ * Generates and sends password to user
  */
 export const generatePassword = async (req, res) => {
   try {
     const { data } = req.body;
     
     if (!config.apiBaseUrl) {
-      throw new Error('API_BASE_URL не определен в конфигурации');
+      throw new Error('API_BASE_URL is not defined in configuration');
     }
     
     const apiUrl = `${config.apiBaseUrl}md/GeneratePasswordForUser`;
-    console.log('Генерация пароля для:', data.PhoneNumber);
+    console.log('Generating password for:', data.PhoneNumber);
     
     const requestData = { ...data };
     if (!requestData.UserId) {
@@ -27,51 +27,51 @@ export const generatePassword = async (req, res) => {
       data: requestData
     });
 
-    // Проверяем успешность
+    // Check success
     if (apiResponse.data.Result === 1 && apiResponse.data.Data) {
       const { PhoneNumber, Password } = apiResponse.data.Data;
       
-      // Сохраняем код на 5 минут
+      // Save code for 5 minutes
       passwordStorage.set(PhoneNumber, {
         password: Password,
         timestamp: Date.now()
       });
       
-      console.log(`Код для ${PhoneNumber} сохранен на 5 минут`);
-      console.log(`Ответ API:`, apiResponse.data);
+      console.log(`Code for ${PhoneNumber} saved for 5 minutes`);
+      console.log(`API Response:`, apiResponse.data);
       
-      // Отправляем только статус на фронт
+      // Send only status to frontend
       return res.json({
         status: 'success',
-        message: 'Код отправлен. Ожидайте SMS.'
+        message: 'code sent. Please wait for SMS.'
       });
     } else {
-      // Если API вернул ошибку
+      // If API returned error
       return res.status(400).json({
         status: 'error',
-        message: apiResponse.data.Data?.Message || 'Не удалось сгенерировать код'
+        message: apiResponse.data.Data?.Message || 'Failed to generate code'
       });
     }
     
   } catch (error) {
-    console.error('Ошибка генерации пароля:', error.message);
+    console.error('Password generation error:', error.message);
     
     if (error.response) {
       return res.status(error.response.status).json({
         status: 'error',
-        message: 'Ошибка при генерации кода'
+        message: 'Error from API: ' + (error.response.data?.Data?.Message || 'Unknown error')
       });
     }
     
     res.status(500).json({
       status: 'error',
-      message: 'Ошибка сервера при генерации кода'
+      message: 'Internal server error'
     });
   }
 };
 
 /**
- * Проверяет введенный пользователем пароль
+ * Verifies user-entered password
  */
 export const verifyPassword = async (req, res) => {
   try {
@@ -82,40 +82,40 @@ export const verifyPassword = async (req, res) => {
     if (!stored) {
       return res.status(400).json({
         status: 'error',
-        message: 'Код не найден или истек. Запросите новый код.'
+        message: 'code not found or expired. Request a new code.'
       });
     }
     
-    // Проверяем срок действия (5 минут)
+    // Check expiration (5 minutes)
     const fiveMinutes = 5 * 60 * 1000;
     if (Date.now() - stored.timestamp > fiveMinutes) {
       passwordStorage.delete(phoneNumber);
       return res.status(400).json({
         status: 'error',
-        message: 'Код истек. Запросите новый код.'
+        message: 'code expired. Request a new code.'
       });
     }
     
-    // Проверяем совпадение
+    // Check match
     if (stored.password === password) {
-      // Удаляем использованный код
+      // Delete used code
       passwordStorage.delete(phoneNumber);
       return res.json({
         status: 'success',
-        message: 'Код подтвержден'
+        message: 'success verification'
       });
     } else {
       return res.status(400).json({
         status: 'error',
-        message: 'Неверный код'
+        message: 'invalid verification code'
       });
     }
     
   } catch (error) {
-    console.error('Ошибка проверки пароля:', error.message);
+    console.error('Error verifying password:', error.message);
     res.status(500).json({
       status: 'error',
-      message: 'Ошибка сервера при проверке кода'
+      message: 'Internal server error'
     });
   }
 };

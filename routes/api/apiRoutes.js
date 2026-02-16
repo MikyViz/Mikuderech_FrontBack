@@ -6,32 +6,32 @@ import { validateRequest } from '../../middleware/validation.js';
 const router = express.Router();
 
 /**
- * Контроллер для общих API запросов
- * Обрабатывает все запросы к внешнему API
+ * Controller for general API requests
+ * Handles all requests to external API
  */
 router.post('/:endpoint', validateRequest, async (req, res) => {
   try {
     const { endpoint } = req.params;
     const { data } = req.body;
     
-    // Проверка корректности apiBaseUrl
+    // Validate apiBaseUrl
     if (!config.apiBaseUrl) {
-      throw new Error('API_BASE_URL не определен в конфигурации');
+      throw new Error('API_BASE_URL is not defined in configuration');
     }
     
-    // Исправлен формат URL - добавлен сегмент 'md/'
+    // Fixed URL format - added 'md/' segment
     const apiUrl = `${config.apiBaseUrl}md/${endpoint}`;
-    console.log('Отправка запроса к:', apiUrl);
+    console.log('Sending request to:', apiUrl);
     
-    // Добавляем UserId в data, если его там нет
+    // Add UserId to data if it's not there
     const requestData = { ...data };
     if (!requestData.UserId) {
       requestData.UserId = config.userId;
     }
     
-    console.log('Отправляемые данные:', requestData);
+    console.log('Data being sent:', requestData);
     
-    // Формируем запрос к внешнему API
+    // Form request to external API
     console.time('API Request Time');
     const apiResponse = await axios.post(apiUrl, {
       userName: config.apiCredentials.userName,
@@ -40,7 +40,7 @@ router.post('/:endpoint', validateRequest, async (req, res) => {
     });
     console.timeEnd('API Request Time');
 
-    // Возвращаем результат клиенту
+    // Return result to client
     res.json(apiResponse.data);
   } catch (error) {
     console.error('API Error:', error.message);
@@ -49,14 +49,14 @@ router.post('/:endpoint', validateRequest, async (req, res) => {
     }
     console.error('Config:', config);
     
-    // Возвращаем ошибку, если она от API
+    // Return error if it's from API
     if (error.response) {
       return res.status(error.response.status).json(error.response.data);
     }
     
     res.status(500).json({
       status: 'error',
-      message: 'Ошибка при обращении к API',
+      message: 'Error accessing API',
       error: error.message
     });
   }

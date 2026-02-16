@@ -4,10 +4,10 @@ import apiRoutes from './api/apiRoutes.js';
 
 const router = express.Router();
 
-// Подключаем роуты для аутентификации
+// Connect authentication routes
 router.use('/auth', authRoutes);
 
-// Подключаем роуты для API
+// Connect API routes
 router.use('/api', apiRoutes);
 
 // Health check

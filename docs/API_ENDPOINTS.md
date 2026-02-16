@@ -1,19 +1,19 @@
 # API Endpoints Documentation
 
-## 📝 Изменения в путях API
+## 📝 API Path Changes
 
-### ⚠️ ВАЖНО для фронтенда!
-Все пути были реорганизованы с новой архитектурой. Теперь API разделен на логические группы.
+### ⚠️ IMPORTANT for frontend!
+All paths have been reorganized with the new architecture. The API is now divided into logical groups.
 
 ---
 
-## 🔐 Аутентификация (`/auth`)
+## 🔐 Authentication (`/auth`)
 
-### 1. Генерация SMS-кода
-**Старый путь:** `POST /GeneratePasswordForUser`  
-**Новый путь:** `POST /auth/generate-password`
+### 1. SMS Code Generation
+**Old path:** `POST /GeneratePasswordForUser`  
+**New path:** `POST /auth/generate-password`
 
-**Описание:** Генерирует и отправляет SMS-код на телефон пользователя
+**Description:** Generates and sends SMS code to user's phone
 
 **Request:**
 ```json
@@ -24,28 +24,28 @@
 }
 ```
 
-**Response (успех):**
+**Response (success):**
 ```json
 {
   "status": "success",
-  "message": "Код отправлен. Ожидайте SMS."
+  "message": "Code sent. Please wait for SMS."
 }
 ```
 
-**Response (ошибка):**
+**Response (error):**
 ```json
 {
   "status": "error",
-  "message": "Не удалось сгенерировать код"
+  "message": "Failed to generate code"
 }
 ```
 
 ---
 
-### 2. Проверка SMS-кода
-**Путь:** `POST /auth/verify-password`
+### 2. SMS Code Verification
+**Path:** `POST /auth/verify-password`
 
-**Описание:** Проверяет введенный пользователем SMS-код
+**Description:** Verifies the SMS code entered by the user
 
 **Request:**
 ```json
@@ -57,69 +57,69 @@
 }
 ```
 
-**Response (успех):**
+**Response (success):**
 ```json
 {
   "status": "success",
-  "message": "Код подтвержден"
+  "message": "Code verified"
 }
 ```
 
-**Response (ошибка):**
+**Response (error):**
 ```json
 {
   "status": "error",
-  "message": "Неверный код" // или "Код истек. Запросите новый код."
+  "message": "Invalid code" // or "Code expired. Request a new code."
 }
 ```
 
 ---
 
-### 3. Аутентификация
-**Путь:** `POST /auth/auth`
+### 3. Authentication
+**Path:** `POST /auth/auth`
 
-**Описание:** Основная аутентификация пользователя
+**Description:** Main user authentication
 
 **Request:**
 ```json
 {
   "data": {
-    // данные для аутентификации
+    // authentication data
   }
 }
 ```
 
 ---
 
-## 🚀 API проксирование (`/api`)
+## 🚀 API Proxying (`/api`)
 
-### Общий endpoint для всех API запросов
-**Старый путь:** `POST /:endpoint`  
-**Новый путь:** `POST /api/:endpoint`
+### General endpoint for all API requests
+**Old path:** `POST /:endpoint`  
+**New path:** `POST /api/:endpoint`
 
-**Примеры:**
-- `POST /api/GetUserInfo` (было `POST /GetUserInfo`)
-- `POST /api/UpdateProfile` (было `POST /UpdateProfile`)
-- `POST /api/GetTransportList` (было `POST /GetTransportList`)
+**Examples:**
+- `POST /api/GetUserInfo` (was `POST /GetUserInfo`)
+- `POST /api/UpdateProfile` (was `POST /UpdateProfile`)
+- `POST /api/GetTransportList` (was `POST /GetTransportList`)
 
 **Request:**
 ```json
 {
   "data": {
-    // ваши данные
+    // your data
   }
 }
 ```
 
-**Response:** Возвращает ответ от внешнего API без изменений
+**Response:** Returns response from external API without changes
 
 ---
 
 ## 🏥 Health Check
 
-**Путь:** `GET /health`
+**Path:** `GET /health`
 
-**Описание:** Проверка работоспособности сервера
+**Description:** Server health check
 
 **Response:**
 ```json
@@ -131,31 +131,31 @@
 
 ---
 
-## 🔄 Миграция с фронтенда
+## 🔄 Frontend Migration
 
-### Примеры изменений в коде:
+### Code change examples:
 
-#### До:
+#### Before:
 ```javascript
-// Генерация пароля
+// Password generation
 await axios.post('http://localhost:8888/GeneratePasswordForUser', {
   data: { PhoneNumber: phone }
 });
 
-// Другие API запросы
+// Other API requests
 await axios.post('http://localhost:8888/GetUserInfo', {
   data: { UserId: userId }
 });
 ```
 
-#### После:
+#### After:
 ```javascript
-// Генерация пароля
+// Password generation
 await axios.post('http://localhost:8888/auth/generate-password', {
   data: { PhoneNumber: phone }
 });
 
-// Другие API запросы
+// Other API requests
 await axios.post('http://localhost:8888/api/GetUserInfo', {
   data: { UserId: userId }
 });
@@ -163,25 +163,25 @@ await axios.post('http://localhost:8888/api/GetUserInfo', {
 
 ---
 
-## 📋 Полная таблица миграции путей
+## 📋 Complete Path Migration Table
 
-| Функция | Старый путь | Новый путь |
+| Function | Old Path | New Path |
 |---------|-------------|------------|
-| Генерация SMS | `POST /GeneratePasswordForUser` | `POST /auth/generate-password` |
-| Проверка SMS | ➕ Новый | `POST /auth/verify-password` |
-| Аутентификация | `POST /auth` | `POST /auth/auth` |
-| Все остальные API | `POST /:endpoint` | `POST /api/:endpoint` |
+| SMS Generation | `POST /GeneratePasswordForUser` | `POST /auth/generate-password` |
+| SMS Verification | ➕ New | `POST /auth/verify-password` |
+| Authentication | `POST /auth` | `POST /auth/auth` |
+| All other APIs | `POST /:endpoint` | `POST /api/:endpoint` |
 
 ---
 
-## 💡 Рекомендации
+## 💡 Recommendations
 
-1. **Базовый URL:** Создайте константу для базового URL
+1. **Base URL:** Create a constant for the base URL
    ```javascript
    const API_BASE_URL = 'http://localhost:8888';
    ```
 
-2. **Axios instance:** Используйте axios instance для удобства
+2. **Axios instance:** Use axios instance for convenience
    ```javascript
    const authAPI = axios.create({
      baseURL: `${API_BASE_URL}/auth`
@@ -192,7 +192,7 @@ await axios.post('http://localhost:8888/api/GetUserInfo', {
    });
    ```
 
-3. **Централизованный API сервис:**
+3. **Centralized API service:**
    ```javascript
    // services/api.js
    export const authService = {
@@ -211,7 +211,7 @@ await axios.post('http://localhost:8888/api/GetUserInfo', {
 
 ---
 
-## ⏱️ Временные ограничения
+## ⏱️ Time Limitations
 
-- **SMS-код действителен:** 5 минут
-- **Очистка старых кодов:** каждую минуту
+- **SMS code validity:** 5 minutes
+- **Old code cleanup:** every minute

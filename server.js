@@ -13,7 +13,7 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 
-// Инициализация очистки старых паролей
+// Initialize old password cleanup
 initPasswordCleanup();
 
 // Routes
@@ -24,7 +24,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     status: 'error',
-    message: 'Что-то пошло не так!',
+    message: 'Something went wrong!',
     error: process.env.NODE_ENV === 'development' ? err.message : {}
   });
 });

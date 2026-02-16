@@ -1,22 +1,22 @@
 /**
- * Проверяет корректность входящего запроса
+ * Validates incoming request
  */
 export const validateRequest = (req, res, next) => {
-  // Проверка необходимых полей в запросе
+  // Check required fields in request
   if (!req.body || !req.body.data) {
     return res.status(400).json({
       status: 'error',
-      message: 'Отсутствуют необходимые данные в запросе'
+      message: 'Required data missing in request'
     });
   }
   
-  // Проверка, что data - объект. Если это строка, пытаемся распарсить её как JSON
+  // Check that data is an object. If it's a string, try to parse it as JSON
   if (typeof req.body.data === 'string') {
     try {
       req.body.data = JSON.parse(req.body.data);
     } catch (error) {
-      console.error('Ошибка при парсинге data как JSON:', error);
-      // Не возвращаем ошибку, продолжаем с данными как есть
+      console.error('Error parsing data as JSON:', error);
+      // Don't return error, continue with data as is
     }
   }
   

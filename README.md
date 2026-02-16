@@ -1,116 +1,116 @@
-# Mikuderech Backend - Архитектура проекта
+# Mikuderech Backend - Project Architecture
 
-## Структура проекта
+## Project Structure
 
 ```
 Mikuderech_FrontBack/
-├── config/                    # Конфигурационные файлы
-│   ├── config.js             # Основная конфигурация приложения
-│   └── firebase-config.js    # Конфигурация Firebase
+├── config/                    # Configuration files
+│   ├── config.js             # Main application configuration
+│   └── firebase-config.js    # Firebase configuration
 │
-├── routes/                    # Маршруты приложения
-│   ├── index.js              # Главный роутер
-│   ├── auth/                 # Аутентификация
-│   │   ├── authRoutes.js     # Роуты аутентификации
-│   │   ├── authController.js # Контроллер аутентификации
-│   │   └── passwordController.js # Контроллер для работы с паролями/SMS
-│   └── api/                  # API маршруты
-│       ├── index.js          # API роутер
-│       ├── apiRoutes.js      # Общие API роуты
-│       └── transportRoutes.js # Транспортные роуты
+├── routes/                    # Application routes
+│   ├── index.js              # Main router
+│   ├── auth/                 # Authentication
+│   │   ├── authRoutes.js     # Authentication routes
+│   │   ├── authController.js # Authentication controller
+│   │   └── passwordController.js # Password/SMS controller
+│   └── api/                  # API routes
+│       ├── index.js          # API router
+│       ├── apiRoutes.js      # General API routes
+│       └── transportRoutes.js # Transport routes
 │
-├── middleware/               # Middleware функции
-│   ├── index.js             # Экспорт всех middleware
-│   ├── auth.js              # Middleware для аутентификации
-│   └── validation.js        # Middleware для валидации
+├── middleware/               # Middleware functions
+│   ├── index.js             # Export all middleware
+│   ├── auth.js              # Authentication middleware
+│   └── validation.js        # Validation middleware
 │
-├── services/                # Бизнес-логика и сервисы
-│   ├── apiService.js       # Сервис для работы с внешним API
-│   ├── firebaseService.js  # Сервис для работы с Firebase
-│   ├── userService.js      # Сервис для работы с пользователями
-│   └── passwordService.js  # Сервис для работы с паролями/кодами SMS
+├── services/                # Business logic and services
+│   ├── apiService.js       # Service for external API
+│   ├── firebaseService.js  # Firebase service
+│   ├── userService.js      # User service
+│   └── passwordService.js  # Password/SMS codes service
 │
-├── utils/                   # Утилиты и вспомогательные функции
-│   └── errorHandler.js     # Обработчик ошибок
+├── utils/                   # Utilities and helper functions
+│   └── errorHandler.js     # Error handler
 │
-├── docs/                    # Документация
-├── logs/                    # Логи приложения
-├── scripts/                 # Скрипты для различных задач
-│   └── admin/              # Админские скрипты
+├── docs/                    # Documentation
+├── logs/                    # Application logs
+├── scripts/                 # Scripts for various tasks
+│   └── admin/              # Admin scripts
 │
-├── server.js               # Точка входа приложения
-└── package.json            # Зависимости и скрипты
+├── server.js               # Application entry point
+└── package.json            # Dependencies and scripts
 
 ```
 
-## Описание компонентов
+## Component Description
 
 ### Server.js
-Главный файл приложения. Настраивает Express, подключает middleware и роуты.
+Main application file. Configures Express, connects middleware and routes.
 
 ### Routes
-Все маршруты разделены по функциональности:
-- **auth/** - Аутентификация пользователей, генерация и проверка SMS-кодов
-- **api/** - Проксирование запросов к внешнему API
+All routes are divided by functionality:
+- **auth/** - User authentication, SMS code generation and verification
+- **api/** - Proxying requests to external API
 
 ### Services
-Содержат бизнес-логику:
-- **passwordService.js** - Управление временными кодами подтверждения (хранение и очистка)
-- **apiService.js** - Работа с внешним API
-- **firebaseService.js** - Интеграция с Firebase
+Contains business logic:
+- **passwordService.js** - Managing temporary verification codes (storage and cleanup)
+- **apiService.js** - Working with external API
+- **firebaseService.js** - Firebase integration
 
 ### Middleware
-- **auth.js** - Проверка токенов и авторизация
-- **validation.js** - Валидация входящих данных
+- **auth.js** - Token verification and authorization
+- **validation.js** - Validation of incoming data
 
 ## API Endpoints
 
-### 📚 Полная документация API
-- **[API_ENDPOINTS.md](docs/API_ENDPOINTS.md)** - Подробная документация всех endpoints
-- **[QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)** - Быстрая шпаргалка для фронтенда
-- **[frontend-examples.js](docs/frontend-examples.js)** - Примеры кода для интеграции
+### 📚 Complete API Documentation
+- **[API_ENDPOINTS.md](docs/API_ENDPOINTS.md)** - Detailed documentation of all endpoints
+- **[QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)** - Quick reference for frontend
+- **[frontend-examples.js](docs/frontend-examples.js)** - Code examples for integration
 
-### Аутентификация (`/auth`)
-- `POST /auth/auth` - Аутентификация пользователя
-- `POST /auth/generate-password` - Генерация и отправка SMS-кода
-- `POST /auth/verify-password` - Проверка введенного SMS-кода
+### Authentication (`/auth`)
+- `POST /auth/auth` - User authentication
+- `POST /auth/generate-password` - SMS code generation and sending
+- `POST /auth/verify-password` - Verification of entered SMS code
 
 ### API (`/api`)
-- `POST /api/:endpoint` - Проксирование запросов к внешнему API
-  - Пример: `POST /api/GetUserInfo`
-  - Пример: `POST /api/UpdateProfile`
+- `POST /api/:endpoint` - Proxying requests to external API
+  - Example: `POST /api/GetUserInfo`
+  - Example: `POST /api/UpdateProfile`
 
 ### Health Check
-- `GET /health` - Проверка состояния сервера
+- `GET /health` - Server health check
 
-### ⚠️ Миграция с предыдущей версии
-Если вы использовали старые пути, обновите их:
+### ⚠️ Migration from Previous Version
+If you used old paths, update them:
 - `POST /GeneratePasswordForUser` → `POST /auth/generate-password`
 - `POST /:endpoint` → `POST /api/:endpoint`
 
-## Принципы архитектуры
+## Architecture Principles
 
-1. **Разделение ответственности** - Каждый модуль отвечает за свою функциональность
-2. **Модульность** - Легко добавлять новые функции
-3. **Масштабируемость** - Структура поддерживает рост проекта
-4. **Читаемость** - Понятная организация файлов
+1. **Separation of Concerns** - Each module is responsible for its functionality
+2. **Modularity** - Easy to add new features
+3. **Scalability** - Structure supports project growth
+4. **Readability** - Clear file organization
 
-## Запуск проекта
+## Running the Project
 
 ```bash
-# Установка зависимостей
+# Install dependencies
 npm install
 
-# Запуск в режиме разработки
+# Run in development mode
 npm run dev
 
-# Запуск в production
+# Run in production
 npm start
 ```
 
-## Переменные окружения
+## Environment Variables
 
-Создайте файл `.env` в корне проекта:
+Create a `.env` file in the project root:
 
 ```env
 PORT=3000

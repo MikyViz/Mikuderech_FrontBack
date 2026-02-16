@@ -1,78 +1,78 @@
 // ===================================
-// Примеры для фронтенда
+// Frontend Examples
 // ===================================
 
 const API_BASE_URL = 'http://localhost:8888';
 
 // ===================================
-// 1. ГЕНЕРАЦИЯ И ОТПРАВКА SMS-КОДА
+// 1. SMS CODE GENERATION AND SENDING
 // ===================================
 
 /**
- * Отправляет SMS-код на указанный номер телефона
+ * Sends SMS code to the specified phone number
  */
 async function sendSMSCode(phoneNumber) {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/generate-password`, {
       data: {
-        PhoneNumber: phoneNumber  // Например: "+972501234567"
+        PhoneNumber: phoneNumber  // For example: "+972501234567"
       }
     });
     
     if (response.data.status === 'success') {
-      console.log('✅ SMS-код отправлен!');
+      console.log('✅ SMS code sent!');
       return { success: true, message: response.data.message };
     }
   } catch (error) {
-    console.error('❌ Ошибка отправки SMS:', error.response?.data);
+    console.error('❌ SMS sending error:', error.response?.data);
     return { 
       success: false, 
-      message: error.response?.data?.message || 'Ошибка отправки кода'
+      message: error.response?.data?.message || 'Code sending error'
     };
   }
 }
 
-// Пример использования:
+// Usage example:
 // const result = await sendSMSCode('+972501234567');
 
 // ===================================
-// 2. ПРОВЕРКА SMS-КОДА
+// 2. SMS CODE VERIFICATION
 // ===================================
 
 /**
- * Проверяет введенный пользователем SMS-код
+ * Verifies the SMS code entered by the user
  */
 async function verifySMSCode(phoneNumber, code) {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/verify-password`, {
       data: {
-        phoneNumber: phoneNumber,  // Например: "+972501234567"
-        password: code             // Например: "123456"
+        phoneNumber: phoneNumber,  // For example: "+972501234567"
+        password: code             // For example: "123456"
       }
     });
     
     if (response.data.status === 'success') {
-      console.log('✅ Код подтвержден!');
+      console.log('✅ Code verified!');
       return { success: true, message: response.data.message };
     }
   } catch (error) {
-    console.error('❌ Ошибка проверки кода:', error.response?.data);
+    console.error('❌ Code verification error:', error.response?.data);
     return { 
       success: false, 
-      message: error.response?.data?.message || 'Неверный код'
+      message: error.response?.data?.message || 'Invalid code'
     };
   }
 }
 
-// Пример использования:
+// Usage example:
 // const result = await verifySMSCode('+972501234567', '123456');
 
 // ===================================
-// 3. ОБЩИЕ API ЗАПРОСЫ
+// 3. GENERAL API REQUESTS
 // ===================================
 
 /**
- * Универсальная функция для любых API запросов
+ * Universal function for any API requests
  */
 async function callAPI(endpoint, data) {
   try {
@@ -82,55 +82,55 @@ async function callAPI(endpoint, data) {
     
     return { success: true, data: response.data };
   } catch (error) {
-    console.error(`❌ Ошибка API ${endpoint}:`, error.response?.data);
+    console.error(`❌ API error ${endpoint}:`, error.response?.data);
     return { 
       success: false, 
-      error: error.response?.data || 'Ошибка сервера'
+      error: error.response?.data || 'Server error'
     };
   }
 }
 
-// Примеры использования:
+// Usage examples:
 // const userInfo = await callAPI('GetUserInfo', { UserId: '123' });
 // const profile = await callAPI('UpdateProfile', { Name: 'John', Phone: '+972...' });
 
 // ===================================
-// 4. ПОЛНЫЙ ПРИМЕР АВТОРИЗАЦИИ
+// 4. COMPLETE AUTHORIZATION EXAMPLE
 // ===================================
 
 /**
- * Полный flow авторизации по SMS
+ * Complete SMS authorization flow
  */
 async function loginWithSMS(phoneNumber) {
-  // Шаг 1: Отправить SMS-код
-  console.log('📱 Отправка SMS-кода...');
+  // Step 1: Send SMS code
+  console.log('📱 Sending SMS code...');
   const sendResult = await sendSMSCode(phoneNumber);
   
   if (!sendResult.success) {
-    return { success: false, message: 'Не удалось отправить код' };
+    return { success: false, message: 'Failed to send code' };
   }
   
-  // Шаг 2: Пользователь вводит код (это должно происходить в UI)
-  // const userEnteredCode = prompt('Введите код из SMS:');
+  // Step 2: User enters code (this should happen in UI)
+  // const userEnteredCode = prompt('Enter code from SMS:');
   
-  // Шаг 3: Проверить код
-  // console.log('🔐 Проверка кода...');
+  // Step 3: Verify code
+  // console.log('🔐 Verifying code...');
   // const verifyResult = await verifySMSCode(phoneNumber, userEnteredCode);
   
   // if (verifyResult.success) {
-  //   console.log('✅ Успешная авторизация!');
+  //   console.log('✅ Successful authorization!');
   //   return { success: true };
   // } else {
-  //   console.log('❌ Неверный код');
+  //   console.log('❌ Invalid code');
   //   return { success: false, message: verifyResult.message };
   // }
 }
 
 // ===================================
-// 5. AXIOS INSTANCE (РЕКОМЕНДУЕТСЯ)
+// 5. AXIOS INSTANCE (RECOMMENDED)
 // ===================================
 
-// Создаем отдельные instance для разных групп API
+// Create separate instances for different API groups
 const authAPI = axios.create({
   baseURL: `${API_BASE_URL}/auth`,
   headers: { 'Content-Type': 'application/json' }
@@ -141,7 +141,7 @@ const apiClient = axios.create({
   headers: { 'Content-Type': 'application/json' }
 });
 
-// Использование:
+// Usage:
 // authAPI.post('/generate-password', { data: { PhoneNumber: phone } });
 // apiClient.post('/GetUserInfo', { data: { UserId: userId } });
 

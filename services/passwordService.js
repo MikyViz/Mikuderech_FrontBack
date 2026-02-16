@@ -1,11 +1,11 @@
 /**
- * Временное хранилище для кодов подтверждения
- * Структура: телефон -> {password, timestamp}
+ * Temporary storage for verification codes
+ * Structure: phone -> {password, timestamp}
  */
 export const passwordStorage = new Map();
 
 /**
- * Очистка старых кодов (старше 5 минут)
+ * Cleanup old codes (older than 5 minutes)
  */
 export const initPasswordCleanup = () => {
   setInterval(() => {
@@ -15,8 +15,8 @@ export const initPasswordCleanup = () => {
     for (const [phone, data] of passwordStorage.entries()) {
       if (now - data.timestamp > fiveMinutes) {
         passwordStorage.delete(phone);
-        console.log(`Код для ${phone} удален (истек срок)`);
+        console.log(`Code for ${phone} deleted (expired)`);
       }
     }
-  }, 60000); // Проверка каждую минуту
+  }, 60000); // Check every minute
 };

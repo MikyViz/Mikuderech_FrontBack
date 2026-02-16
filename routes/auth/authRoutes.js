@@ -5,13 +5,13 @@ import { validateRequest } from '../../middleware/validation.js';
 
 const router = express.Router();
 
-// Аутентификация пользователя
+// User authentication
 router.post('/auth', authController);
 
-// Генерация пароля для SMS
+// Password generation for SMS
 router.post('/generate-password', validateRequest, generatePassword);
 
-// Проверка введенного пароля
+// Verification of entered password
 router.post('/verify-password', validateRequest, verifyPassword);
 
 export default router;
