@@ -1,83 +1,83 @@
-# 🎯 Инструкция для фронтенда - КОРОТКО И ЯСНО
+# 🎯 Frontend Instructions - SHORT AND CLEAR
 
-## ⚠️ ЧТО ИЗМЕНИЛОСЬ
+## ⚠️ WHAT CHANGED
 
-Сервер был реорганизован. **ВСЕ ПУТИ API ИЗМЕНИЛИСЬ!**
+The server was reorganized. **ALL API PATHS HAVE CHANGED!**
 
 ---
 
-## 📝 ТАБЛИЦА ИЗМЕНЕНИЙ
+## 📝 TABLE OF CHANGES
 
-| Было | Стало | Описание |
+| Before | After | Description |
 |------|-------|----------|
-| `POST /GeneratePasswordForUser` | `POST /auth/generate-password` | Отправка SMS-кода |
-| ➕ **Новый** | `POST /auth/verify-password` | Проверка SMS-кода |
-| `POST /auth` | `POST /auth/auth` | Аутентификация |
-| `POST /GetUserInfo` | `POST /api/GetUserInfo` | API запросы |
-| `POST /UpdateProfile` | `POST /api/UpdateProfile` | API запросы |
-| `POST /:endpoint` | `POST /api/:endpoint` | Все остальные API |
+| `POST /GeneratePasswordForUser` | `POST /auth/generate-password` | Send SMS code |
+| ➕ **New** | `POST /auth/verify-password` | Verify SMS code |
+| `POST /auth` | `POST /auth/auth` | Authentication |
+| `POST /GetUserInfo` | `POST /api/GetUserInfo` | API requests |
+| `POST /UpdateProfile` | `POST /api/UpdateProfile` | API requests |
+| `POST /:endpoint` | `POST /api/:endpoint` | All other APIs |
 
 ---
 
-## 🔧 ЧТО НУЖНО СДЕЛАТЬ
+## 🔧 WHAT TO DO
 
-### 1️⃣ SMS Авторизация
+### 1️⃣ SMS Authorization
 
-#### Отправка кода
+#### Send code
 ```javascript
-// ❌ СТАРЫЙ КОД - УДАЛИТЬ
+// ❌ OLD CODE - REMOVE
 axios.post('http://localhost:8888/GeneratePasswordForUser', {
   data: { PhoneNumber: "+972501234567" }
 })
 
-// ✅ НОВЫЙ КОД - ИСПОЛЬЗОВАТЬ
+// ✅ NEW CODE - USE THIS
 axios.post('http://localhost:8888/auth/generate-password', {
   data: { PhoneNumber: "+972501234567" }
 })
 ```
 
-#### Проверка кода (НОВЫЙ ENDPOINT!)
+#### Verify code (NEW ENDPOINT!)
 ```javascript
-// ✅ ДОБАВИТЬ ЭТОТ КОД
+// ✅ ADD THIS CODE
 axios.post('http://localhost:8888/auth/verify-password', {
   data: { 
     phoneNumber: "+972501234567",
-    password: "123456"  // код из SMS
+    password: "123456"  // code from SMS
   }
 })
 ```
 
-### 2️⃣ Все остальные API запросы
+### 2️⃣ All other API requests
 
 ```javascript
-// ❌ БЫЛО
+// ❌ BEFORE
 axios.post('http://localhost:8888/GetUserInfo', { data: {...} })
 axios.post('http://localhost:8888/UpdateProfile', { data: {...} })
 
-// ✅ СТАЛО - добавить /api/ перед endpoint
+// ✅ AFTER - add /api/ before endpoint
 axios.post('http://localhost:8888/api/GetUserInfo', { data: {...} })
 axios.post('http://localhost:8888/api/UpdateProfile', { data: {...} })
 ```
 
 ---
 
-## 🚀 БЫСТРОЕ РЕШЕНИЕ
+## 🚀 QUICK SOLUTION
 
-### Вариант А: Найти и заменить
+### Option A: Find and replace
 
-В вашем редакторе (VSCode, WebStorm и т.д.):
+In your editor (VSCode, WebStorm, etc.):
 
-**Поиск:** `http://localhost:8888/GeneratePasswordForUser`  
-**Замена:** `http://localhost:8888/auth/generate-password`
+**Search:** `http://localhost:8888/GeneratePasswordForUser`  
+**Replace:** `http://localhost:8888/auth/generate-password`
 
-**Поиск:** `http://localhost:8888/GetUserInfo`  
-**Замена:** `http://localhost:8888/api/GetUserInfo`
+**Search:** `http://localhost:8888/GetUserInfo`  
+**Replace:** `http://localhost:8888/api/GetUserInfo`
 
-И так далее для каждого endpoint...
+And so on for each endpoint...
 
-### Вариант Б: Создать конфиг (РЕКОМЕНДУЕТСЯ)
+### Option B: Create config (RECOMMENDED)
 
-**Создайте файл:** `src/config/api.js`
+**Create file:** `src/config/api.js`
 
 ```javascript
 const BASE_URL = 'http://localhost:8888';
@@ -88,106 +88,106 @@ export const API = {
   VERIFY_PASSWORD: `${BASE_URL}/auth/verify-password`,
   AUTH: `${BASE_URL}/auth/auth`,
   
-  // API - добавьте все ваши endpoints
+  // API - add all your endpoints
   GET_USER_INFO: `${BASE_URL}/api/GetUserInfo`,
   UPDATE_PROFILE: `${BASE_URL}/api/UpdateProfile`,
   GET_TRANSPORT: `${BASE_URL}/api/GetTransportList`,
-  // ... остальные
+  // ... others
 };
 ```
 
-**Используйте:**
+**Use:**
 ```javascript
 import { API } from './config/api';
 
-// Вместо хардкод URL
+// Instead of hardcoded URL
 axios.post(API.GENERATE_PASSWORD, { data: {...} })
 ```
 
 ---
 
-## 📱 ПОЛНЫЙ ПРИМЕР: SMS Авторизация
+## 📱 COMPLETE EXAMPLE: SMS Authorization
 
 ```javascript
 async function loginWithSMS() {
   const phone = "+972501234567";
   
   try {
-    // 1. Отправить SMS-код
+    // 1. Send SMS code
     const sendResponse = await axios.post(
       'http://localhost:8888/auth/generate-password',
       { data: { PhoneNumber: phone } }
     );
     
     if (sendResponse.data.status === 'success') {
-      alert('SMS отправлен! Введите код.');
+      alert('SMS sent! Enter code.');
       
-      // 2. Пользователь вводит код
-      const code = prompt('Введите код из SMS:');
+      // 2. User enters code
+      const code = prompt('Enter code from SMS:');
       
-      // 3. Проверить код
+      // 3. Verify code
       const verifyResponse = await axios.post(
         'http://localhost:8888/auth/verify-password',
         { data: { phoneNumber: phone, password: code } }
       );
       
       if (verifyResponse.data.status === 'success') {
-        alert('Успешная авторизация!');
-        // Переход в приложение
+        alert('Successful authorization!');
+        // Go to app
       } else {
-        alert('Неверный код!');
+        alert('Invalid code!');
       }
     }
   } catch (error) {
-    console.error('Ошибка:', error);
-    alert('Произошла ошибка!');
+    console.error('Error:', error);
+    alert('An error occurred!');
   }
 }
 ```
 
 ---
 
-## ✅ ЧЕКЛИСТ
+## ✅ CHECKLIST
 
-- [ ] Изменил `/GeneratePasswordForUser` → `/auth/generate-password`
-- [ ] Добавил `/auth/verify-password` для проверки кода
-- [ ] Изменил все API запросы: добавил `/api/` перед endpoint
-- [ ] Протестировал отправку SMS
-- [ ] Протестировал проверку кода
-- [ ] Протестировал другие API вызовы
-- [ ] Проверил, что нет 404 ошибок
-- [ ] Все работает! 🎉
+- [ ] Changed `/GeneratePasswordForUser` → `/auth/generate-password`
+- [ ] Added `/auth/verify-password` for code verification
+- [ ] Changed all API requests: added `/api/` before endpoint
+- [ ] Tested SMS sending
+- [ ] Tested code verification
+- [ ] Tested other API calls
+- [ ] Verified no 404 errors
+- [ ] Everything works! 🎉
 
 ---
 
-## 🆘 НЕ РАБОТАЕТ?
+## 🆘 NOT WORKING?
 
 ### 404 Not Found
-→ Проверь, что используешь новые пути с `/auth/` или `/api/`
+→ Check that you're using new paths with `/auth/` or `/api/`
 
 ### 400 Bad Request
-→ Проверь, что данные в формате `{ data: {...} }`
+→ Check that data is in format `{ data: {...} }`
 
-### Сервер не отвечает
-→ Проверь, что backend запущен: `http://localhost:8888/health`
-
----
-
-## 📚 ДОПОЛНИТЕЛЬНО
-
-Полная документация в папке `/docs`:
-- `API_ENDPOINTS.md` - подробная документация
-- `QUICK_REFERENCE.md` - быстрая шпаргалка
-- `frontend-examples.js` - больше примеров кода
-- `ROUTES_MAP.md` - визуальная схема
-- `Mikuderech_API.postman_collection.json` - для тестирования в Postman
+### Server not responding
+→ Check that backend is running: `http://localhost:8888/health`
 
 ---
 
-## 💡 ВАЖНО
+## 📚 ADDITIONAL
 
-**Код будет действителен 5 минут!** После этого нужно запросить новый.
+Full documentation in `/docs` folder:
+- `API_ENDPOINTS.md` - detailed documentation
+- `QUICK_REFERENCE.md` - quick cheatsheet
+- `frontend-examples.js` - more code examples
+- `ROUTES_MAP.md` - visual schema
+- `Mikuderech_API.postman_collection.json` - for testing in Postman
 
 ---
 
-**Вопросы? Проблемы? Проверь документацию в `/docs` или посмотри логи сервера!**
+## 💡 IMPORTANT
+
+**Code will be valid for 5 minutes!** After that, you need to request a new one.
+
+---
+
+**Questions? Problems? Check documentation in `/docs` or look at server logs!**

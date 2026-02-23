@@ -1,55 +1,55 @@
-# 🚀 Quick Reference - Новые пути API
+# 🚀 Quick Reference - New API Paths
 
-## Для фронтенда - изменить URL в этих запросах:
+## For frontend - change URLs in these requests:
 
-### ❌ Старые пути → ✅ Новые пути
+### ❌ Old paths → ✅ New paths
 
 ```javascript
-// 1. ГЕНЕРАЦИЯ SMS-КОДА
+// 1. SMS CODE GENERATION
 ❌ POST /GeneratePasswordForUser
 ✅ POST /auth/generate-password
 
-// 2. ПРОВЕРКА SMS-КОДА (новый endpoint)
+// 2. SMS CODE VERIFICATION (new endpoint)
 ✅ POST /auth/verify-password
 
-// 3. АУТЕНТИФИКАЦИЯ
+// 3. AUTHENTICATION
 ❌ POST /auth
 ✅ POST /auth/auth
 
-// 4. ВСЕ ОСТАЛЬНЫЕ API ЗАПРОСЫ
+// 4. ALL OTHER API REQUESTS
 ❌ POST /GetUserInfo
 ✅ POST /api/GetUserInfo
 
 ❌ POST /UpdateProfile
 ✅ POST /api/UpdateProfile
 
-❌ POST /любой_endpoint
-✅ POST /api/любой_endpoint
+❌ POST /any_endpoint
+✅ POST /api/any_endpoint
 ```
 
-## 📝 Правило простое:
+## 📝 Simple rule:
 
-1. **Аутентификация и SMS** → добавить префикс `/auth/`
-2. **Все остальные API** → добавить префикс `/api/`
+1. **Authentication and SMS** → add prefix `/auth/`
+2. **All other APIs** → add prefix `/api/`
 
-## 🔧 Быстрый фикс в коде:
+## 🔧 Quick fix in code:
 
 ```javascript
-// Найти и заменить:
+// Find and replace:
 const baseURL = 'http://localhost:8888';
 
-// Было:
+// Was:
 axios.post(`${baseURL}/GeneratePasswordForUser`, ...)
-// Стало:
+// Became:
 axios.post(`${baseURL}/auth/generate-password`, ...)
 
-// Было:
+// Was:
 axios.post(`${baseURL}/GetUserInfo`, ...)
-// Стало:
+// Became:
 axios.post(`${baseURL}/api/GetUserInfo`, ...)
 ```
 
 ## 📌 Health Check:
 ```
-GET /health - проверка работы сервера
+GET /health - check server is working
 ```

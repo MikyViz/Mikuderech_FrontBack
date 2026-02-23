@@ -1,41 +1,41 @@
-# ✅ Checklist для фронтенд-разработчика
+# ✅ Frontend Developer Checklist
 
-## 🚀 Миграция на новую структуру API
+## 🚀 Migration to New API Structure
 
-### Шаг 1: Понимание изменений
-- [ ] Прочитал [API_ENDPOINTS.md](API_ENDPOINTS.md)
-- [ ] Посмотрел [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
-- [ ] Изучил [frontend-examples.js](frontend-examples.js)
-- [ ] Понял новую структуру путей:
-  - [ ] `/auth/*` для аутентификации
-  - [ ] `/api/*` для всех остальных запросов
+### Step 1: Understanding Changes
+- [ ] Read [API_ENDPOINTS.md](API_ENDPOINTS.md)
+- [ ] Reviewed [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
+- [ ] Studied [frontend-examples.js](frontend-examples.js)
+- [ ] Understood the new path structure:
+  - [ ] `/auth/*` for authentication
+  - [ ] `/api/*` for all other requests
 
-### Шаг 2: Найти все API вызовы в проекте
-- [ ] Открыл проект в редакторе
-- [ ] Использовал поиск (Ctrl+Shift+F / Cmd+Shift+F)
-- [ ] Искал: `axios.post`, `fetch(`, `.post(`, `http://`
-- [ ] Создал список всех endpoints, которые используются
+### Step 2: Find All API Calls in Project
+- [ ] Opened project in editor
+- [ ] Used search (Ctrl+Shift+F / Cmd+Shift+F)
+- [ ] Searched for: `axios.post`, `fetch(`, `.post(`, `http://`
+- [ ] Created a list of all endpoints being used
 
-### Шаг 3: Обновить пути
+### Step 3: Update Paths
 
-#### Аутентификация
-- [ ] Заменил `/GeneratePasswordForUser` → `/auth/generate-password`
-- [ ] Добавил endpoint `/auth/verify-password` для проверки кода
-- [ ] Обновил `/auth` → `/auth/auth` (если используется)
+#### Authentication
+- [ ] Replaced `/GeneratePasswordForUser` → `/auth/generate-password`
+- [ ] Added endpoint `/auth/verify-password` for code verification
+- [ ] Updated `/auth` → `/auth/auth` (if used)
 
-#### API запросы
-- [ ] Заменил `/GetUserInfo` → `/api/GetUserInfo`
-- [ ] Заменил `/UpdateProfile` → `/api/UpdateProfile`
-- [ ] Заменил `/GetTransportList` → `/api/GetTransportList`
-- [ ] Заменил все остальные `/:endpoint` → `/api/:endpoint`
+#### API Requests
+- [ ] Replaced `/GetUserInfo` → `/api/GetUserInfo`
+- [ ] Replaced `/UpdateProfile` → `/api/UpdateProfile`
+- [ ] Replaced `/GetTransportList` → `/api/GetTransportList`
+- [ ] Replaced all others `/:endpoint` → `/api/:endpoint`
 
-### Шаг 4: Создать конфигурационный файл (рекомендуется)
-- [ ] Создал файл `src/config/api.js` или `src/constants/api.js`
-- [ ] Добавил базовый URL
-- [ ] Добавил все endpoints как константы
-- [ ] Заменил хардкод путей на константы
+### Step 4: Create Configuration File (recommended)
+- [ ] Created file `src/config/api.js` or `src/constants/api.js`
+- [ ] Added base URL
+- [ ] Added all endpoints as constants
+- [ ] Replaced hardcoded paths with constants
 
-**Пример структуры:**
+**Example structure:**
 ```javascript
 // src/config/api.js
 export const API_CONFIG = {
@@ -49,40 +49,40 @@ export const API_CONFIG = {
 };
 ```
 
-### Шаг 5: Обновить axios/fetch вызовы
-- [ ] Импортировал конфиг в нужные файлы
-- [ ] Заменил хардкод URL на константы
-- [ ] Проверил, что все импорты работают
+### Step 5: Update axios/fetch Calls
+- [ ] Imported config to needed files
+- [ ] Replaced hardcoded URLs with constants
+- [ ] Verified all imports work
 
-### Шаг 6: Тестирование
+### Step 6: Testing
 
-#### Локальное тестирование
-- [ ] Запустил backend сервер (`npm run dev`)
-- [ ] Проверил, что сервер работает: `http://localhost:8888/health`
-- [ ] Запустил frontend
-- [ ] Протестировал отправку SMS-кода
-- [ ] Протестировал проверку SMS-кода
-- [ ] Протестировал другие API вызовы
+#### Local Testing
+- [ ] Started backend server (`npm run dev`)
+- [ ] Verified server is working: `http://localhost:8888/health`
+- [ ] Started frontend
+- [ ] Tested SMS code sending
+- [ ] Tested SMS code verification
+- [ ] Tested other API calls
 
-#### Проверка в DevTools
-- [ ] Открыл Network tab в браузере
-- [ ] Проверил, что запросы идут на правильные URL
-- [ ] Проверил, что нет 404 ошибок
-- [ ] Проверил формат request/response
+#### DevTools Verification
+- [ ] Opened Network tab in browser
+- [ ] Verified requests go to correct URLs
+- [ ] Verified no 404 errors
+- [ ] Verified request/response format
 
-### Шаг 7: Обработка ошибок
-- [ ] Добавил обработку ошибок для всех API вызовов
-- [ ] Показываю пользователю понятные сообщения об ошибках
-- [ ] Логирую ошибки в консоль для отладки
+### Step 7: Error Handling
+- [ ] Added error handling for all API calls
+- [ ] Show user-friendly error messages
+- [ ] Log errors to console for debugging
 
-### Шаг 8: Улучшения (опционально)
+### Step 8: Improvements (optional)
 
-#### Создать API service
-- [ ] Создал отдельный файл для API запросов
-- [ ] Использую axios instance
-- [ ] Централизованная обработка ошибок
+#### Create API Service
+- [ ] Created separate file for API requests
+- [ ] Using axios instance
+- [ ] Centralized error handling
 
-**Пример:**
+**Example:**
 ```javascript
 // src/services/api.js
 import axios from 'axios';
@@ -99,89 +99,89 @@ export const authService = {
 };
 ```
 
-#### Добавить TypeScript типы
-- [ ] Создал интерфейсы для request/response
-- [ ] Добавил типизацию для API функций
+#### Add TypeScript Types
+- [ ] Created interfaces for request/response
+- [ ] Added typing for API functions
 
-#### Добавить React Query / SWR (для React)
-- [ ] Настроил React Query / SWR
-- [ ] Создал хуки для API запросов
-- [ ] Добавил кеширование
+#### Add React Query / SWR (for React)
+- [ ] Configured React Query / SWR
+- [ ] Created hooks for API requests
+- [ ] Added caching
 
-### Шаг 9: Документация
-- [ ] Обновил README проекта
-- [ ] Добавил комментарии к API функциям
-- [ ] Документировал изменения для команды
+### Step 9: Documentation
+- [ ] Updated project README
+- [ ] Added comments to API functions
+- [ ] Documented changes for team
 
-### Шаг 10: Deployment
-- [ ] Обновил переменные окружения для production
-- [ ] Изменил BASE_URL на production URL
-- [ ] Протестировал на staging
-- [ ] Задеплоил на production
+### Step 10: Deployment
+- [ ] Updated environment variables for production
+- [ ] Changed BASE_URL to production URL
+- [ ] Tested on staging
+- [ ] Deployed to production
 
 ---
 
-## 📋 Быстрая справка
+## 📋 Quick Reference
 
-### Что менять в коде
+### What to Change in Code
 
 #### React
 ```jsx
-// ❌ Было
+// ❌ Before
 await axios.post('http://localhost:8888/GeneratePasswordForUser', {...})
 
-// ✅ Стало
+// ✅ After
 await axios.post('http://localhost:8888/auth/generate-password', {...})
 ```
 
 #### Vue
 ```javascript
-// ❌ Было
+// ❌ Before
 this.$http.post('/GetUserInfo', {...})
 
-// ✅ Стало
+// ✅ After
 this.$http.post('/api/GetUserInfo', {...})
 ```
 
 #### Angular
 ```typescript
-// ❌ Было
+// ❌ Before
 this.http.post(`${this.apiUrl}/UpdateProfile`, data)
 
-// ✅ Стало
+// ✅ After
 this.http.post(`${this.apiUrl}/api/UpdateProfile`, data)
 ```
 
 ---
 
-## 🆘 Помощь
+## 🆘 Help
 
-### Если что-то не работает:
+### If something doesn't work:
 
-1. **Проверь консоль браузера** - есть ли ошибки?
-2. **Проверь Network tab** - на какой URL идет запрос?
-3. **Проверь backend logs** - что пишет сервер?
-4. **Проверь формат данных** - соответствует ли структура `{ data: {...} }`?
+1. **Check browser console** - any errors?
+2. **Check Network tab** - which URL is being requested?
+3. **Check backend logs** - what does server say?
+4. **Check data format** - does structure match `{ data: {...} }`?
 
-### Частые ошибки:
+### Common Errors:
 
 ❌ **404 Not Found** 
-→ Проверь, что используешь новые пути с `/auth/` или `/api/`
+→ Check that you're using new paths with `/auth/` or `/api/`
 
-❌ **400 Bad Request "Отсутствуют необходимые данные"**
-→ Проверь, что данные обернуты в `{ data: {...} }`
+❌ **400 Bad Request "Missing required data"**
+→ Check that data is wrapped in `{ data: {...} }`
 
 ❌ **CORS Error**
-→ Проверь настройки CORS на backend или используй прокси
+→ Check CORS settings on backend or use proxy
 
 ❌ **500 Internal Server Error**
-→ Проверь logs backend, возможно проблема с .env
+→ Check backend logs, possible issue with .env
 
 ---
 
-## 📞 Контакты
+## 📞 Contact
 
-Если возникли вопросы:
-- Посмотри документацию в `/docs`
-- Проверь примеры в `frontend-examples.js`
-- Импортируй Postman коллекцию для тестов
+If you have questions:
+- Check documentation in `/docs`
+- Check examples in `frontend-examples.js`
+- Import Postman collection for testing

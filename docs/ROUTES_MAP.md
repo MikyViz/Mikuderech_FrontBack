@@ -1,34 +1,34 @@
 # 🗺️ API Routes Map
 
-## Визуальная схема новой структуры
+## Visual schema of new structure
 
 ```
 http://localhost:8888
 │
 ├── 🏥 /health (GET)
-│   └── Проверка работы сервера
+│   └── Check server is working
 │
 ├── 🔐 /auth
 │   ├── POST /auth/auth
-│   │   └── Основная аутентификация
+│   │   └── Main authentication
 │   │
 │   ├── POST /auth/generate-password
-│   │   └── Генерация и отправка SMS-кода
-│   │   └── Сохраняет код на 5 минут
+│   │   └── Generate and send SMS code
+│   │   └── Saves code for 5 minutes
 │   │
 │   └── POST /auth/verify-password
-│       └── Проверка SMS-кода
-│       └── Удаляет код после проверки
+│       └── Verify SMS code
+│       └── Deletes code after verification
 │
 └── 🚀 /api
     └── POST /api/:endpoint
         ├── /api/GetUserInfo
         ├── /api/UpdateProfile
         ├── /api/GetTransportList
-        └── /api/любой_другой_endpoint
+        └── /api/any_other_endpoint
 ```
 
-## 🔄 Flow диаграмма: Авторизация по SMS
+## 🔄 Flow diagram: SMS Authorization
 
 ```
 ┌─────────────┐
@@ -39,38 +39,39 @@ http://localhost:8888
        │    { data: { PhoneNumber: "+972..." } }
        ▼
 ┌─────────────┐
-│   Backend   │──────┐ Сохраняет код
-└──────┬──────┘      │ в passwordStorage
-       │             │ (5 минут)
+│   Backend   │──────┐ Saves code
+└──────┬──────┘      │ in passwordStorage
+       │             │ (5 minutes)
        │ Response    │
        │ { status: "success" }
        ▼             ▼
 ┌─────────────┐  ┌─────────┐
 │  Frontend   │  │  SMS    │
-│ (ждет код)  │  │ отправлен
+│ (waiting    │  │ sent
+│ for code)   │  │
 └──────┬──────┘  └─────────┘
        │
-       │ 2. Пользователь вводит код
+       │ 2. User enters code
        │
        │ 3. POST /auth/verify-password
        │    { data: { phoneNumber: "+972...", password: "123456" } }
        ▼
 ┌─────────────┐
-│   Backend   │──────┐ Проверяет код
-└──────┬──────┘      │ Удаляет после проверки
+│   Backend   │──────┐ Verifies code
+└──────┬──────┘      │ Deletes after verification
        │             │
        │ Response    │
-       │ { status: "success" } или { status: "error" }
+       │ { status: "success" } or { status: "error" }
        ▼
 ┌─────────────┐
 │  Frontend   │
-│ (авторизован)
+│ (authorized)
 └─────────────┘
 ```
 
-## 📊 Сравнение: Было vs Стало
+## 📊 Comparison: Before vs After
 
-### ❌ Старая структура (плоская)
+### ❌ Old structure (flat)
 ```
 /
 ├── GeneratePasswordForUser
@@ -79,12 +80,12 @@ http://localhost:8888
 ├── UpdateProfile
 └── GetTransportList
 ```
-**Проблемы:**
-- Нет организации
-- Сложно масштабировать
-- Непонятная структура
+**Problems:**
+- No organization
+- Hard to scale
+- Unclear structure
 
-### ✅ Новая структура (модульная)
+### ✅ New structure (modular)
 ```
 /
 ├── health
@@ -97,23 +98,23 @@ http://localhost:8888
     ├── UpdateProfile
     └── GetTransportList
 ```
-**Преимущества:**
-- ✅ Логическая группировка
-- ✅ Легко масштабировать
-- ✅ Понятная архитектура
+**Advantages:**
+- ✅ Logical grouping
+- ✅ Easy to scale
+- ✅ Clear architecture
 - ✅ REST best practices
 
-## 🎯 Что нужно изменить на фронтенде
+## 🎯 What needs to be changed on frontend
 
-### Файл конфигурации API (рекомендуется)
+### API configuration file (recommended)
 
-**Создать:** `src/config/api.js`
+**Create:** `src/config/api.js`
 
 ```javascript
 export const API_CONFIG = {
   BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8888',
   ENDPOINTS: {
-    // Аутентификация
+    // Authentication
     AUTH: '/auth/auth',
     GENERATE_PASSWORD: '/auth/generate-password',
     VERIFY_PASSWORD: '/auth/verify-password',
@@ -122,29 +123,29 @@ export const API_CONFIG = {
     GET_USER_INFO: '/api/GetUserInfo',
     UPDATE_PROFILE: '/api/UpdateProfile',
     GET_TRANSPORT_LIST: '/api/GetTransportList',
-    // ... добавьте остальные
+    // ... add the rest
   }
 };
 ```
 
-### Поиск и замена в проекте
+### Find and replace in project
 
 ```bash
-# Найти все места, где используется старый API
-# Поиск в VSCode: Ctrl+Shift+F
+# Find all places where old API is used
+# Search in VSCode: Ctrl+Shift+F
 
-# Искать:
+# Search for:
 /GeneratePasswordForUser
 /GetUserInfo
 /UpdateProfile
 
-# Заменить на:
+# Replace with:
 /auth/generate-password
 /api/GetUserInfo
 /api/UpdateProfile
 ```
 
-## 📱 Мобильное приложение (React Native)
+## 📱 Mobile app (React Native)
 
 ```javascript
 // config/api.js
@@ -161,23 +162,23 @@ export const API = {
 };
 ```
 
-## 🧪 Тестирование через Postman/curl
+## 🧪 Testing via Postman/curl
 
-### 1. Генерация SMS
+### 1. Generate SMS
 ```bash
 curl -X POST http://localhost:8888/auth/generate-password \
   -H "Content-Type: application/json" \
   -d '{"data": {"PhoneNumber": "+972501234567"}}'
 ```
 
-### 2. Проверка кода
+### 2. Verify code
 ```bash
 curl -X POST http://localhost:8888/auth/verify-password \
   -H "Content-Type: application/json" \
   -d '{"data": {"phoneNumber": "+972501234567", "password": "123456"}}'
 ```
 
-### 3. API запрос
+### 3. API request
 ```bash
 curl -X POST http://localhost:8888/api/GetUserInfo \
   -H "Content-Type: application/json" \

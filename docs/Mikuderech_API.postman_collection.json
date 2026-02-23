@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Mikuderech API",
-    "description": "API endpoints для Mikuderech приложения",
+    "description": "API endpoints for Mikuderech application",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -27,7 +27,7 @@
           "host": ["{{baseUrl}}"],
           "path": ["health"]
         },
-        "description": "Проверка работоспособности сервера"
+        "description": "Server health check"
       }
     },
     {
@@ -52,7 +52,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["auth", "generate-password"]
             },
-            "description": "Генерирует и отправляет SMS-код на указанный номер телефона"
+            "description": "Generates and sends SMS code to the specified phone number"
           }
         },
         {
@@ -74,7 +74,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["auth", "verify-password"]
             },
-            "description": "Проверяет введенный пользователем SMS-код"
+            "description": "Verifies the SMS code entered by the user"
           }
         },
         {
@@ -96,11 +96,11 @@
               "host": ["{{baseUrl}}"],
               "path": ["auth", "auth"]
             },
-            "description": "Основная аутентификация пользователя"
+            "description": "Main user authentication"
           }
         }
       ],
-      "description": "Endpoints для аутентификации"
+      "description": "Authentication endpoints"
     },
     {
       "name": "API",
@@ -124,7 +124,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "GetUserInfo"]
             },
-            "description": "Получить информацию о пользователе"
+            "description": "Get user information"
           }
         },
         {
@@ -146,7 +146,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "UpdateProfile"]
             },
-            "description": "Обновить профиль пользователя"
+            "description": "Update user profile"
           }
         },
         {
@@ -168,7 +168,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "GetTransportList"]
             },
-            "description": "Получить список транспорта"
+            "description": "Get transport list"
           }
         },
         {
@@ -183,7 +183,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"data\": {\n    // ваши параметры\n  }\n}"
+              "raw": "{\n  \"data\": {\n    // your parameters\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/:endpoint",
@@ -193,15 +193,15 @@
                 {
                   "key": "endpoint",
                   "value": "YourEndpoint",
-                  "description": "Замените на нужный endpoint"
+                  "description": "Replace with the required endpoint"
                 }
               ]
             },
-            "description": "Шаблон для любого API запроса"
+            "description": "Template for any API request"
           }
         }
       ],
-      "description": "Общие API endpoints"
+      "description": "General API endpoints"
     }
   ]
 }
