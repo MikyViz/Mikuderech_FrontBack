@@ -91,7 +91,93 @@ All paths have been reorganized with the new architecture. The API is now divide
 
 ---
 
-## 🚀 API Proxying (`/api`)
+## � Email (`/api/email`)
+
+### Send Email to Support
+**Path:** `POST /api/email/send`
+
+**Description:** Sends email to support address. Email is formatted in Hebrew (RTL).
+
+**Request:**
+```json
+{
+  "message": "Message text here",
+  "title": "Email subject (optional)",
+  "userName": "Sender name (optional)",
+  "userEmail": "sender@example.com (optional, for Reply-To)"
+}
+```
+
+**Required fields:**
+- `message` (string): Email body content (max 100,000 characters)
+
+**Optional fields:**
+- `title` (string): Email subject. If not provided, will be extracted from first line of message
+- `userName` (string): Sender name to display in email
+- `userEmail` (string): Sender email address for Reply-To header
+
+**Response (success):**
+```json
+{
+  "status": "success",
+  "ok": true,
+  "messageId": "<unique-message-id>"
+}
+```
+
+**Response (error - missing message):**
+```json
+{
+  "status": "error",
+  "error": "נדרש תוכן הודעה"
+}
+```
+
+**Response (error - message too large):**
+```json
+{
+  "status": "error",
+  "error": "ההודעה גדולה מדי"
+}
+```
+
+**Response (error - send failed):**
+```json
+{
+  "status": "error",
+  "error": "שליחת אימייל נכשלה"
+}
+```
+
+**Example usage:**
+```javascript
+// Send email with all fields
+await axios.post('http://localhost:8888/api/email/send', {
+  message: 'This is my message text',
+  title: 'Contact Request',
+  userName: 'John Doe',
+  userEmail: 'john@example.com'
+});
+
+// Send email with only message (minimal)
+await axios.post('http://localhost:8888/api/email/send', {
+  message: 'My message here'
+});
+```
+
+**Environment variables required:**
+- `SMTP_HOST`: SMTP server hostname
+- `SMTP_PORT`: SMTP server port (default: 587)
+- `SMTP_SECURE`: Use secure connection (true/false, default: false)
+- `SMTP_USER`: SMTP authentication username
+- `SMTP_PASS`: SMTP authentication password
+- `SMTP_FROM`: Sender email address
+- `SMTP_TO`: Recipient email address
+- `SMTP_SUBJECT`: Default subject if not provided
+
+---
+
+## �🚀 API Proxying (`/api`)
 
 ### General endpoint for all API requests
 **Old path:** `POST /:endpoint`  
@@ -170,6 +256,7 @@ await axios.post('http://localhost:8888/api/GetUserInfo', {
 | SMS Generation | `POST /GeneratePasswordForUser` | `POST /auth/generate-password` |
 | SMS Verification | ➕ New | `POST /auth/verify-password` |
 | Authentication | `POST /auth` | `POST /auth/auth` |
+| Send Email | ➕ New | `POST /api/email/send` |
 | All other APIs | `POST /:endpoint` | `POST /api/:endpoint` |
 
 ---
