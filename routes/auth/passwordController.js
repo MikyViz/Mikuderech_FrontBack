@@ -43,13 +43,13 @@ export const generatePassword = async (req, res) => {
       // Send only status to frontend
       return res.json({
         status: 'success',
-        message: 'code sent. Please wait for SMS.'
+        message: 'הקוד נשלח. אנא המתן להודעת SMS.'
       });
     } else {
       // If API returned error
       return res.status(400).json({
         status: 'error',
-        message: apiResponse.data.Data?.Message || 'Failed to generate code'
+        message: apiResponse.data.Data?.Message || 'יצירת הקוד נכשלה'
       });
     }
     
@@ -59,13 +59,13 @@ export const generatePassword = async (req, res) => {
     if (error.response) {
       return res.status(error.response.status).json({
         status: 'error',
-        message: 'Error from API: ' + (error.response.data?.Data?.Message || 'Unknown error')
+        message: 'שגיאה מה-API: ' + (error.response.data?.Data?.Message || 'שגיאה לא ידועה')
       });
     }
     
     res.status(500).json({
       status: 'error',
-      message: 'Internal server error'
+      message: 'שגיאת שרת פנימית'
     });
   }
 };
@@ -82,7 +82,7 @@ export const verifyPassword = async (req, res) => {
     if (!stored) {
       return res.status(400).json({
         status: 'error',
-        message: 'code not found or expired. Request a new code.'
+        message: 'קוד לא נמצא או פג תוקף. בקש קוד חדש.'
       });
     }
     
@@ -92,7 +92,7 @@ export const verifyPassword = async (req, res) => {
       passwordStorage.delete(phoneNumber);
       return res.status(400).json({
         status: 'error',
-        message: 'code expired. Request a new code.'
+        message: 'הקוד פג תוקף. בקש קוד חדש.'
       });
     }
     
@@ -102,12 +102,12 @@ export const verifyPassword = async (req, res) => {
       passwordStorage.delete(phoneNumber);
       return res.json({
         status: 'success',
-        message: 'success verification'
+        message: 'האימות הצליח'
       });
     } else {
       return res.status(400).json({
         status: 'error',
-        message: 'invalid verification code'
+        message: 'קוד אימות שגוי'
       });
     }
     
@@ -115,7 +115,7 @@ export const verifyPassword = async (req, res) => {
     console.error('Error verifying password:', error.message);
     res.status(500).json({
       status: 'error',
-      message: 'Internal server error'
+      message: 'שגיאת שרת פנימית'
     });
   }
 };

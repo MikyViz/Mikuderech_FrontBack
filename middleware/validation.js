@@ -6,7 +6,7 @@ export const validateRequest = (req, res, next) => {
   if (!req.body || !req.body.data) {
     return res.status(400).json({
       status: 'error',
-      message: 'Required data missing in request'
+      message: 'נתונים חובה חסרים בבקשה'
     });
   }
   

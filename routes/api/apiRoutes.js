@@ -56,7 +56,7 @@ router.post('/:endpoint', validateRequest, async (req, res) => {
     
     res.status(500).json({
       status: 'error',
-      message: 'Error accessing API',
+      message: 'שגיאה בגישה לAPI',
       error: error.message
     });
   }

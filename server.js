@@ -24,7 +24,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     status: 'error',
-    message: 'Something went wrong!',
+    message: 'משהו השתבש!',
     error: process.env.NODE_ENV === 'development' ? err.message : {}
   });
 });

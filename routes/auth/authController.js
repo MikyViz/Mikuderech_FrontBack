@@ -37,7 +37,7 @@ export const authController = async (req, res) => {
     
     res.status(500).json({
       status: 'error',
-      message: 'Server error during authentication'
+      message: 'שגיאת שרת במהלך אימות'
     });
   }
 };
