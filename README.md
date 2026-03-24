@@ -115,8 +115,5 @@ Create a `.env` file in the project root:
 ```env
 PORT=3000
 API_BASE_URL=your_api_url
-API_USERNAME=your_username
-API_PASSWORD=your_password
-API_USERID=your_user_id
 NODE_ENV=development
 ```
