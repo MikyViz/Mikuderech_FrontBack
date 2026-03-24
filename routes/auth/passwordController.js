@@ -22,8 +22,6 @@ export const generatePassword = async (req, res) => {
     }
     
     const apiResponse = await axios.post(apiUrl, {
-      userName: config.apiCredentials.userName,
-      password: config.apiCredentials.password,
       data: requestData
     });
 

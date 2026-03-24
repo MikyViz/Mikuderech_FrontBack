@@ -34,8 +34,6 @@ router.post('/:endpoint', validateRequest, async (req, res) => {
     // Form request to external API
     console.time('API Request Time');
     const apiResponse = await axios.post(apiUrl, {
-      userName: config.apiCredentials.userName,
-      password: config.apiCredentials.password,
       data: requestData
     });
     console.timeEnd('API Request Time');
